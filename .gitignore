@@ -2,12 +2,17 @@ venv/
 .venv/
 
 *.pyc
+__pycache__/
 
-
-sample.py
+# uv (local tooling only, never committed)
+uv.lock
+.python-version
 
 instance/
 
+# local-only tests (run: uv run --with pytest pytest -q)
+test_*.py
+conftest.py
 .pytest_cache/
 .coverage
 htmlcov/
@@ -17,6 +22,11 @@ build/
 *.egg-info/
 
 .DS_STORE
+.idea/
+.vscode/
 
 .env
+
+# leftovers from the upstream fork source (openai/openai-quickstart-python)
+sample.py
 *.gif

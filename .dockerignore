@@ -1,4 +1,31 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Byte-compiled
+**/__pycache__/
+**/*.py[cod]
+
+# Virtual environments
 .venv/
-__pycache__/
-.env.example
-sample.py
+venv/
+
+# Secrets
+.env
+
+# Tests
+**/test_*.py
+**/.pytest_cache/
+.coverage
+htmlcov/
+
+# Distribution
+dist/
+build/
+*.egg-info/
+
+# Editors
+.idea/
+.vscode/
+**/*.swp

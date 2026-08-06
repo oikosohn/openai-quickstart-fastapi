@@ -1,3 +1,3 @@
+fastapi[standard]
 openai
-fastapi
-pydantic-settings
+python-dotenv

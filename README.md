@@ -1,66 +1,96 @@
 # OpenAI API Quickstart with FastAPI
 
-This is an example pet name generator app used in the OpenAI API [quickstart tutorial](https://beta.openai.com/docs/quickstart). It uses the [FastAPI](https://fastapi.tiangolo.com/) web framework. Check out the tutorial or follow the instructions below to get set up.
+A [FastAPI](https://fastapi.tiangolo.com/) port of [openai/openai-quickstart-python](https://github.com/openai/openai-quickstart-python). Check out the `examples` folder to try them out.
+
+| Example | What it shows |
+| --- | --- |
+| [`examples/pet-name`](examples/pet-name) | A form that generates superhero pet names, using the Responses API |
+| [`examples/chat`](examples/chat) | A multi-turn chat that streams tokens as they arrive, using Chat Completions |
 
 ## Setup
 
-1. If you don’t have Python installed, [install it from here](https://www.python.org/downloads/)
+1. If you don’t have Python installed, install it [from Python.org](https://www.python.org/downloads/).
 
-2. Clone this repository
+2. [Clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) this repository.
 
-3. Navigate into the project directory
+3. Navigate into the project directory:
 
    ```bash
    $ cd openai-quickstart-fastapi
    ```
 
-4. Create a new virtual environment
+4. Create a new virtual environment:
 
-   ```bash
-   # Linux
-   $ python -m venv venv
-   $ . venv/bin/activate
-   ```
+   - macOS / Linux:
 
-   ```shell
-   # Windows
-   python -m venv venv
-   venv\Scripts\activate
-   ```
+     ```bash
+     $ python -m venv venv
+     $ . venv/bin/activate
+     ```
 
-5. Install the requirements
+   - Windows:
+
+     ```cmd
+     > python -m venv venv
+     > .\venv\Scripts\activate
+     ```
+
+5. Install the requirements:
 
    ```bash
    $ pip install -r requirements.txt
    ```
 
-6. Make a copy of the example environment variables file
+6. Make a copy of the example environment variables file:
 
    ```bash
-   # Linux
    $ cp .env.example .env
    ```
 
-   ```shell
-   # Windows
-   xcopy .env.example .env
-   ```
+7. Add your [API key](https://platform.openai.com/api-keys) to the newly created `.env` file.
 
-7. Add your [API key](https://beta.openai.com/account/api-keys) to the newly created `.env` file
-
-8. Run the app
+8. Run an example:
 
    ```bash
-   $ python app.py
+   $ cd examples/pet-name
+   $ fastapi dev app.py
    ```
-You should now be able to access the app at [http://localhost:5001](http://localhost:5001)! 
 
-   ![demo](https://user-images.githubusercontent.com/59533593/173504130-6b36bad6-267a-45b2-96b9-14abe9493ad1.gif)
-   
-This repogitory is based on the Flask code at [openai-quickstart-python](https://github.com/openai/openai-quickstart-python). For the full context behind OpenAI API Quickstart(Flask), check out the [tutorial](https://beta.openai.com/docs/quickstart).
+You should now be able to access the app from your browser at [http://localhost:8000](http://localhost:8000)!
+
+![demo](https://user-images.githubusercontent.com/59533593/173504130-6b36bad6-267a-45b2-96b9-14abe9493ad1.gif)
+
+### Using uv
+
+Steps 4 and 5 with [uv](https://docs.astral.sh/uv/) instead:
+
+```bash
+$ uv venv
+$ uv pip install -r requirements.txt
+```
+
+## Choosing a model
+
+Both examples read `OPENAI_MODEL`, so you can try another model without editing
+the code:
+
+```bash
+$ OPENAI_MODEL=gpt-5-mini fastapi dev app.py
+```
+
+The SDK also reads `OPENAI_BASE_URL`, which lets the chat example run against
+any OpenAI-compatible endpoint. Note that the pet name example uses the
+Responses API, which fewer providers implement.
+
+## Docker
+
+Builds the pet name example:
+
+```bash
+$ docker build -t openai-quickstart-fastapi .
+$ docker run -e OPENAI_API_KEY=<your-api-key> -p 8000:8000 openai-quickstart-fastapi
+```
 
 ## Reference
 
 - [openai/openai-quickstart-python](https://github.com/openai/openai-quickstart-python)
-
-

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>OpenAI Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/main.css') }}" />
+  </head>
+  <body>
+    <h3>Chat</h3>
+    <div class="chat"></div>
+    <form>
+      <textarea name="message" placeholder="Type your message here..." required></textarea>
+      <input type="submit" value="Send" />
+    </form>
+    <script>
+      const history = [];
+      const chat = document.querySelector(".chat");
+      const form = document.querySelector("form");
+      const input = form.querySelector("textarea");
+      const send = form.querySelector('input[type="submit"]');
+
+      function bubble(role, text) {
+        const el = document.createElement("div");
+        el.className = role;
+        el.textContent = text;
+        chat.appendChild(el);
+        chat.scrollTop = chat.scrollHeight;
+        return el;
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const content = input.value.trim();
+        if (!content) return;
+
+        input.value = "";
+        send.disabled = true;
+        history.push({ role: "user", content });
+        bubble("user", content);
+        const reply = bubble("assistant", "");
+
+        try {
+          const response = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ messages: history }),
+          });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+          const reader = response.body
+            .pipeThrough(new TextDecoderStream())
+            .getReader();
+          let text = "";
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            text += value;
+            reply.textContent = text;
+            chat.scrollTop = chat.scrollHeight;
+          }
+          history.push({ role: "assistant", content: text });
+        } catch (error) {
+          // Drop the failed turn so the next message is not sent with a
+          // half-finished assistant reply in the history.
+          history.pop();
+          reply.className = "error";
+          reply.textContent = `Something went wrong: ${error.message}`;
+        } finally {
+          send.disabled = false;
+          input.focus();
+        }
+      });
+    </script>
+  </body>
+</html>
